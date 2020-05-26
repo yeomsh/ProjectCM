@@ -60,6 +60,9 @@ public class CMInfo {
 	public static final int CM_MULTI_SERVER_EVENT = 316;
 	public static final int CM_MQTT_EVENT = 317;
 	
+	//ÆÀÇÃ Ãß°¡
+	public static final int CM_SERVER_LIST_EVENT = 2017;
+	
 	//public static final int CM_EVENT_HANDLER = 401;
 	public static final int CM_MQTT_EVENT_HANDLER = 402;
 	
