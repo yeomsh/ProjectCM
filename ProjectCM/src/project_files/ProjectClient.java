@@ -1194,7 +1194,7 @@ public class ProjectClient extends JFrame {
 			}
 			//프로젝트 추가
 			else if(button.getText().equals("Login2")){
-				System.out.println("로그인2 버튼 클릭");
+				testLoginDS2();
 			}
 //			else if(button.equals(m_composeSNSContentButton))
 //			{

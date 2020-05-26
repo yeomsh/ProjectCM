@@ -3,34 +3,34 @@ package kr.ac.konkuk.ccslab.cm.event;
 import java.nio.ByteBuffer;
 import java.util.Vector;
 
-import kr.ac.konkuk.ccslab.cm.entity.CMUser;
+import kr.ac.konkuk.ccslab.cm.entity.CMServerInfo;
 import kr.ac.konkuk.ccslab.cm.info.CMInfo;
 
 public class ServerListEvent extends CMEvent{
 	
-	private Vector<CMUser> m_serverList;
+	private Vector<CMServerInfo> p_serverList;
 	private String recStr;
 	
 	public ServerListEvent() {
 		m_nType = CMInfo.CM_SERVER_LIST_EVENT;
-		m_serverList = new Vector<CMUser>();
+		p_serverList = new Vector<CMServerInfo>();
 	}
 	
-	public ServerListEvent(Vector<CMUser> s_list) {
+	public ServerListEvent(Vector<CMServerInfo> s_list) {
 		this();
 	}
 	
-	public void setServerListInfo(Vector<CMUser> s_list) {
+	public void setServerListInfo(Vector<CMServerInfo> s_list) {
 		if(s_list!=null){
-			m_serverList = s_list;
+			p_serverList = s_list;
 		}
 		for(int i=0;i<s_list.size();i++) {
 			recStr += s_list.get(i);
 		}
 	}
 	
-	public Vector<CMUser> getServerListInfo(){
-		return m_serverList;
+	public Vector<CMServerInfo> getServerListInfo(){
+		return p_serverList;
 	}
 	
 	protected int getByteNum()

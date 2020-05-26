@@ -528,7 +528,7 @@ public class CMClientStub extends CMStub {
 		se.setHostAddress(strMyAddr);
 		se.setUDPPort(nMyUDPPort);
 		se.setKeepAliveTime(confInfo.getKeepAliveTime());
-		se.m_sessionMessage = "CMClientStub에서 초기화";
+//		se.m_sessionMessage = "CMClientStub에서 초기화";
 		
 		// set information on the local user
 		CMUser myself = getMyself();

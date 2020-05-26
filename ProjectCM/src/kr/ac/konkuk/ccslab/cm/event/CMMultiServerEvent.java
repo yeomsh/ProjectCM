@@ -1,6 +1,10 @@
 package kr.ac.konkuk.ccslab.cm.event;
-import java.nio.*;
-import java.util.*;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.util.Iterator;
+import java.util.Vector;
 
 import kr.ac.konkuk.ccslab.cm.entity.CMGroupInfo;
 import kr.ac.konkuk.ccslab.cm.entity.CMServerInfo;
@@ -92,15 +96,32 @@ public class CMMultiServerEvent extends CMEvent{
 		m_nKeepAliveTime = 0;
 
 		m_serverList = new Vector<CMServerInfo>();
+//		m_serverList = getList();
 		m_sessionList = new Vector<CMSessionInfo>();
 		m_groupList = new Vector<CMGroupInfo>();
 				
 	}
 	
+	//팀플 추가
+//	private void makeList() {
+//		m_serverList = new Vector<CMServerInfo>();
+//	}
+//	private Vector<CMServerInfo> getList(){
+//		if(m_serverList==null) {
+//			makeList();
+//		}
+//		return m_serverList;
+//	}
+	
 	public CMMultiServerEvent(ByteBuffer msg)
 	{
 		this();
 		unmarshall(msg);
+	}
+	
+	//팀플 추가
+	public void showAllServerList() {
+		
 	}
 	
 	// set/get methods
@@ -316,7 +337,22 @@ public class CMMultiServerEvent extends CMEvent{
 			return false;
 		}
 		
+		//팀플
 		m_serverList.addElement(si);
+		
+		for(int i=0;i<m_serverList.size();i++) {
+			System.out.println("*** 서버 리스트 파일에 저장 ***");
+			
+			//System.out.println(m_serverList.get(i).toString());
+			
+			try {
+				OutputStream output = new FileOutputStream("DB.txt",true);
+				output.write(m_serverList.get(i).toString().getBytes());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 		if(CMInfo._CM_DEBUG)
 			System.out.println("CMMultiServerEvent.addServerInfo(), ok server name: "+si.getServerName());

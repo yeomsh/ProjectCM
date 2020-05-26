@@ -1,20 +1,18 @@
 package kr.ac.konkuk.ccslab.cm.stub;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.nio.channels.SocketChannel;
-import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.Vector;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import kr.ac.konkuk.ccslab.cm.entity.CMGroup;
 import kr.ac.konkuk.ccslab.cm.entity.CMMember;
+import kr.ac.konkuk.ccslab.cm.entity.CMServerInfo;
 import kr.ac.konkuk.ccslab.cm.entity.CMSession;
 import kr.ac.konkuk.ccslab.cm.entity.CMUser;
 import kr.ac.konkuk.ccslab.cm.event.CMMultiServerEvent;
@@ -41,6 +39,9 @@ import kr.ac.konkuk.ccslab.cm.thread.CMServerKeepAliveTask;
  */
 public class CMServerStub extends CMStub {
 
+	//ÆÀÇÃ Ãß°¡
+	private Vector<CMServerInfo> m_ServerStubList;
+	
 	/**
 	 * Creates an instance of the CMServerStub class.
 	 * 
@@ -49,6 +50,26 @@ public class CMServerStub extends CMStub {
 	public CMServerStub()
 	{
 		super();
+		//ÆÀÇÃ Ãß°¡
+		m_ServerStubList = new Vector<CMServerInfo>();
+		try {
+			OutputStream output = new FileOutputStream("DB.txt");
+			//output.write(null);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	//ÆÀÇÃ Ãß°¡
+	public void addServerStubList(CMServerInfo si) {
+		m_ServerStubList.add(si);
+		showServerStubList();
+	}
+	public void showServerStubList() {
+		for(int i=0;i<m_ServerStubList.size();i++) {
+			System.out.println(m_ServerStubList.get(i).toString());
+		}
 	}
 	
 	/**

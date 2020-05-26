@@ -1490,7 +1490,7 @@ public class CMInteractionManager {
 		seAck.setCommArch(confInfo.getCommArch());
 		
 		//评敲
-		seAck.m_sessionMessage = "具具具具具具具";
+//		seAck.m_sessionMessage = "具具具具具具具";
 		
 		if(confInfo.isFileTransferScheme())
 			seAck.setFileTransferScheme(1);

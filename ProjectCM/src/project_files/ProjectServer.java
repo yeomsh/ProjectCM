@@ -27,6 +27,7 @@ import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 import kr.ac.konkuk.ccslab.cm.entity.CMGroup;
 import kr.ac.konkuk.ccslab.cm.entity.CMMember;
+import kr.ac.konkuk.ccslab.cm.entity.CMServerInfo;
 import kr.ac.konkuk.ccslab.cm.entity.CMSession;
 import kr.ac.konkuk.ccslab.cm.entity.CMUser;
 import kr.ac.konkuk.ccslab.cm.info.CMInfo;
@@ -44,6 +45,7 @@ public class ProjectServer extends JFrame {
 	private CMServerStub m_serverStub;
 	private CMWinServerEventHandler m_eventHandler;
 	private CMSNSUserAccessSimulator m_uaSim;
+	Vector<CMServerInfo> m_addServerList;
 	
 	ProjectServer()
 	{

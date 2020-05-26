@@ -30,6 +30,16 @@ public class CMServerInfo {
 		m_nServerPort = sport;
 		m_nServerUDPPort = sudpport;
 	}
+	
+	//ÆÀÇÃ
+	public String toString() {
+//		protected String m_strServerName;
+//		protected String m_strServerAddress;
+//		protected int m_nServerPort;
+//		protected int m_nServerUDPPort;
+		
+		return m_strServerName+", "+m_strServerAddress+", "+m_nServerPort+", "+m_nServerUDPPort+"\n";
+	}
 
 	public synchronized void setServerName(String sname)
 	{
