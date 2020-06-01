@@ -744,7 +744,7 @@ public class CMInteractionManager {
 				break;
 			case CMInfo.CM_SERVER_LIST_EVENT:
 				if(CMInfo._CM_DEBUG)
-					System.out.print(msg + ", " + cmInfo);
+					System.out.print((ServerListEvent)cmEvent + ", " + cmInfo);
 					//System.out.println("CMInteractionManager.processEvent(), serverListEvent, nothing to do.");
 				else {
 					System.out.println("CMInteractionManager.processEvent(), serverListEvent-2, nothing to do.");
@@ -2197,7 +2197,7 @@ public class CMInteractionManager {
 		
 		//CMDummyEvent due = new CMDummyEvent();
 		ServerListEvent due = new ServerListEvent();
-		due.tempSetRecStr("serverList 보내는 내용 추가하기");
+		due.readServerList();
         due.setReceiver(se.getSender());
         due.setSender(strMyName);
 		seAck.setChannelName(interInfo.getMyself().getName());

@@ -78,6 +78,7 @@ public class CMEventManager {
 		{
 		case CMInfo.CM_SESSION_EVENT:
 			CMSessionEvent se = new CMSessionEvent(buf);
+			System.out.println(se);
 			return se;
 		case CMInfo.CM_INTEREST_EVENT:
 			CMInterestEvent ie = new CMInterestEvent(buf);
@@ -161,6 +162,9 @@ public class CMEventManager {
 		case CMInfo.CM_SERVER_LIST_EVENT:
 			System.out.println("CM_SERVER_LIST_EVENT");
 			ServerListEvent sle = new ServerListEvent(buf);
+			System.out.println("!!!!" + sle.getRecStr());
+			System.out.println(sle.getServerListInfo().get(0));
+			
 			return sle;
 		default:
 			System.err.println("CMEventManager.unmarshallEvent(), unknown event type: "+nEventType);
