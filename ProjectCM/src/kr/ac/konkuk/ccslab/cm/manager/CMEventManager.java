@@ -24,6 +24,7 @@ import kr.ac.konkuk.ccslab.cm.event.CMMultiServerEvent;
 import kr.ac.konkuk.ccslab.cm.event.CMSNSEvent;
 import kr.ac.konkuk.ccslab.cm.event.CMSessionEvent;
 import kr.ac.konkuk.ccslab.cm.event.CMUserEvent;
+import kr.ac.konkuk.ccslab.cm.event.ServerListEvent;
 import kr.ac.konkuk.ccslab.cm.event.mqttevent.CMMqttEvent;
 import kr.ac.konkuk.ccslab.cm.event.mqttevent.CMMqttEventCONNACK;
 import kr.ac.konkuk.ccslab.cm.event.mqttevent.CMMqttEventCONNECT;
@@ -156,6 +157,11 @@ public class CMEventManager {
 				return null;
 			}
 			// from here
+			
+		case CMInfo.CM_SERVER_LIST_EVENT:
+			System.out.println("CM_SERVER_LIST_EVENT");
+			ServerListEvent sle = new ServerListEvent(buf);
+			return sle;
 		default:
 			System.err.println("CMEventManager.unmarshallEvent(), unknown event type: "+nEventType);
 			return null;

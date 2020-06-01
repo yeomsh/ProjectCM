@@ -24,6 +24,7 @@ import kr.ac.konkuk.ccslab.cm.entity.CMUser;
 import kr.ac.konkuk.ccslab.cm.event.CMEvent;
 import kr.ac.konkuk.ccslab.cm.event.CMMultiServerEvent;
 import kr.ac.konkuk.ccslab.cm.event.CMSessionEvent;
+import kr.ac.konkuk.ccslab.cm.event.ServerListEvent;
 import kr.ac.konkuk.ccslab.cm.event.handler.CMEventHandler;
 import kr.ac.konkuk.ccslab.cm.info.CMCommInfo;
 import kr.ac.konkuk.ccslab.cm.info.CMConfigurationInfo;
@@ -739,6 +740,16 @@ public class CMInteractionManager {
 			case CMInfo.CM_USER_EVENT:
 				if(CMInfo._CM_DEBUG)
 					System.out.println("CMInteractionManager.processEvent(), user event, nothing to do.");
+				bProcessed = true;
+				break;
+			case CMInfo.CM_SERVER_LIST_EVENT:
+				if(CMInfo._CM_DEBUG)
+					System.out.print(msg + ", " + cmInfo);
+					//System.out.println("CMInteractionManager.processEvent(), serverListEvent, nothing to do.");
+				else {
+					System.out.println("CMInteractionManager.processEvent(), serverListEvent-2, nothing to do.");
+
+				}
 				bProcessed = true;
 				break;
 			default:
@@ -2182,6 +2193,15 @@ public class CMInteractionManager {
 		seAck.setReceiver(se.getSender());
 		seAck.setChannelName(interInfo.getMyself().getName());
 		seAck.setChannelNum(nChKey);
+		
+		
+		//CMDummyEvent due = new CMDummyEvent();
+		ServerListEvent due = new ServerListEvent();
+		due.tempSetRecStr("serverList 보내는 내용 추가하기");
+        due.setReceiver(se.getSender());
+        due.setSender(strMyName);
+		seAck.setChannelName(interInfo.getMyself().getName());
+		seAck.setChannelNum(nChKey);
 
 		// The receiving channel is included in the Selector with the nonblocking mode.
 		// This channel must be taken out from the Selector and changed to the blocking mode.
@@ -2274,7 +2294,10 @@ public class CMInteractionManager {
 		}
 		else
 		{
-			ret = CMEventManager.unicastEvent(seAck, user.getName(), cmInfo);			
+			
+			ret = CMEventManager.unicastEvent(seAck, user.getName(), cmInfo);
+			System.out.println("444444");
+			CMEventManager.unicastEvent(due, user.getName(), cmInfo);
 		}
 		
 		se = null;

@@ -16,6 +16,13 @@ public class ServerListEvent extends CMEvent{
 		p_serverList = new Vector<CMServerInfo>();
 	}
 	
+	
+	public ServerListEvent(ByteBuffer msg)
+	{
+		this();
+		unmarshall(msg);
+	}
+	
 	public ServerListEvent(Vector<CMServerInfo> s_list) {
 		this();
 	}
@@ -53,5 +60,10 @@ public class ServerListEvent extends CMEvent{
 	protected void unmarshallBody(ByteBuffer msg) {
 		// TODO Auto-generated method stub
 		recStr = getStringFromByteBuffer(msg);
+	}
+
+	public void tempSetRecStr(String str) {
+		// TODO Auto-generated method stub
+		recStr = str;
 	}
 }

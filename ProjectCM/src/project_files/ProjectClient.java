@@ -39,6 +39,7 @@ import kr.ac.konkuk.ccslab.cm.entity.CMGroupInfo;
 import kr.ac.konkuk.ccslab.cm.entity.CMServer;
 import kr.ac.konkuk.ccslab.cm.entity.CMSession;
 import kr.ac.konkuk.ccslab.cm.entity.CMUser;
+import kr.ac.konkuk.ccslab.cm.event.CMDummyEvent;
 import kr.ac.konkuk.ccslab.cm.event.CMInterestEvent;
 import kr.ac.konkuk.ccslab.cm.event.CMSessionEvent;
 import kr.ac.konkuk.ccslab.cm.info.CMConfigurationInfo;
@@ -438,8 +439,8 @@ public class ProjectClient extends JFrame {
 			case "multicast chat in current group":
 				testMulticastChat();
 				break;
-//			case "test CMDummyEvent":
-//				testDummyEvent();
+			case "test CMDummyEvent":
+				testDummyEvent();
 //				break;
 //			case "test CMUserEvent":
 //				testUserEvent();
@@ -1312,8 +1313,69 @@ public class ProjectClient extends JFrame {
 			}
 		}
 		
+		
+		printMessage("======\n");
+
+	}
+	
+	
+	public void testDummyEvent2()
+	{
+		System.out.println("testDummyEvent2");
+		CMInteractionInfo interInfo = m_clientStub.getCMInfo().getInteractionInfo();
+		CMUser myself = interInfo.getMyself();
+		String strInput = "hi";
+		
+		if(myself.getState() != CMInfo.CM_SESSION_JOIN)
+		{
+			printMessage("You should join a session and a group!\n");
+			return;
+		}
+		
+		printMessage("====== test CMDummyEvent in current group\n");
+
+		if(strInput == null) return;
+		
+		
+		CMDummyEvent due = new CMDummyEvent();
+		due.setHandlerSession(myself.getCurrentSession());
+		due.setHandlerGroup(myself.getCurrentGroup());
+		due.setDummyInfo(strInput);
+		m_clientStub.cast(due, myself.getCurrentSession(), myself.getCurrentGroup());
+		due = null;
+		
 		printMessage("======\n");
 	}
+
+	
+	public void testDummyEvent()
+	{
+		CMInteractionInfo interInfo = m_clientStub.getCMInfo().getInteractionInfo();
+		CMUser myself = interInfo.getMyself();
+		String strInput = null;
+		
+		if(myself.getState() != CMInfo.CM_SESSION_JOIN)
+		{
+			printMessage("You should join a session and a group!\n");
+			return;
+		}
+		
+		printMessage("====== test CMDummyEvent in current group\n");
+
+		strInput = JOptionPane.showInputDialog("Input Message: ");
+		if(strInput == null) return;
+		
+		
+		CMDummyEvent due = new CMDummyEvent();
+		due.setHandlerSession(myself.getCurrentSession());
+		due.setHandlerGroup(myself.getCurrentGroup());
+		due.setDummyInfo(strInput);
+		m_clientStub.cast(due, myself.getCurrentSession(), myself.getCurrentGroup());
+		due = null;
+		
+		printMessage("======\n");
+	}
+	
 	
 	public void testStartCM()
 	{
