@@ -372,6 +372,7 @@ public class ProjectServer extends JFrame {
 			case "send CMDummyEvent":
 				sendCMDummyEvent();
 				break;
+				
 //			case "set file path":
 //				setFilePath();
 //				break;
@@ -559,7 +560,7 @@ public class ProjectServer extends JFrame {
 		
 		serviceMenu.add(infoSubMenu);
 		
-	serviceMenu.add(infoSubMenu);
+		serviceMenu.add(infoSubMenu);
 		
 		JMenu eventTransmissionSubMenu = new JMenu("Event Transmission");
 		JMenuItem sendDummyEventMenuItem = new JMenuItem("send CMDummyEvent");
