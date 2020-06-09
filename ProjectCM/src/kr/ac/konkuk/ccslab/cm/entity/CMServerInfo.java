@@ -38,7 +38,7 @@ public class CMServerInfo {
 //		protected int m_nServerPort;
 //		protected int m_nServerUDPPort;
 		
-		return m_strServerName+", "+m_strServerAddress+", "+m_nServerPort+", "+m_nServerUDPPort+"\n";
+		return m_strServerName+", "+m_strServerAddress+", "+m_nServerPort+", "+m_nServerUDPPort;
 	}
 
 	public synchronized void setServerName(String sname)

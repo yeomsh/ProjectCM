@@ -345,9 +345,10 @@ public class CMMultiServerEvent extends CMEvent{
 			
 			//System.out.println(m_serverList.get(i).toString());
 			
+			
 			try {
 				OutputStream output = new FileOutputStream("DB.txt",true);
-				output.write(m_serverList.get(i).toString().getBytes());
+				output.write((m_serverList.get(i).toString()+", 0, ").getBytes());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

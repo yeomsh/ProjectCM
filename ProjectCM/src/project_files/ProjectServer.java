@@ -31,6 +31,7 @@ import kr.ac.konkuk.ccslab.cm.entity.CMServerInfo;
 import kr.ac.konkuk.ccslab.cm.entity.CMSession;
 import kr.ac.konkuk.ccslab.cm.entity.CMUser;
 import kr.ac.konkuk.ccslab.cm.event.CMDummyEvent;
+import kr.ac.konkuk.ccslab.cm.event.ServerListEvent;
 import kr.ac.konkuk.ccslab.cm.info.CMInfo;
 import kr.ac.konkuk.ccslab.cm.info.CMInteractionInfo;
 import kr.ac.konkuk.ccslab.cm.manager.CMCommManager;
@@ -369,7 +370,7 @@ public class ProjectServer extends JFrame {
 			case "test output network throughput":
 				measureOutputThroughput();
 				break;
-			case "send CMDummyEvent":
+			case "send logined User List":
 				sendCMDummyEvent();
 				break;
 				
@@ -563,7 +564,7 @@ public class ProjectServer extends JFrame {
 		serviceMenu.add(infoSubMenu);
 		
 		JMenu eventTransmissionSubMenu = new JMenu("Event Transmission");
-		JMenuItem sendDummyEventMenuItem = new JMenuItem("send CMDummyEvent");
+		JMenuItem sendDummyEventMenuItem = new JMenuItem("send logined User List");
 		sendDummyEventMenuItem.addActionListener(menuListener);
 		eventTransmissionSubMenu.add(sendDummyEventMenuItem);
 		
@@ -644,57 +645,45 @@ public class ProjectServer extends JFrame {
 	}
 	public void sendCMDummyEvent()
 	{
-		String strMessage = null;
-		String strTarget = null;
+		//로그인한 유저 수 가져오기
+		CMMember loginUsers = m_serverStub.getLoginUsers();
+		int loginedUserCnt = loginUsers.getMemberNum();
+//		String strMessage = Integer.toString(loginedUserCnt);
+		
+		//항상 디폴트 서버로 보냄
+		String strTarget = "SERVER";
+		
 		String strSession = null;
 		String strGroup = null;
-		CMDummyEvent de = null;
-		printMessage("====== test event transmission\n");
-
-		JTextField messageField = new JTextField();
-		JTextField targetField = new JTextField();
-		JTextField sessionField = new JTextField();
-		JTextField groupField = new JTextField();
+//		CMDummyEvent de = null;
+		ServerListEvent se = null;
 		
-		Object[] msg = {
-			"Dummy message: ", messageField,
-			"Target name (for send()): ", targetField,
-			"Target session (for cast() or broadcast()): ", sessionField,
-			"Target group (for cast() or broadcast()): ", groupField
-		};
-		int option = JOptionPane.showConfirmDialog(null, msg, "CMDummyEvent Transmission", 
-				JOptionPane.OK_CANCEL_OPTION);
-		if(option == JOptionPane.OK_OPTION)
+		printMessage("====== test event transmission\n");
+		 se = new ServerListEvent(m_serverStub.getMyself().getName(),
+				 m_serverStub.getMyself().getHost(),
+				 m_serverStub.getServerPort(),
+				 8888, loginedUserCnt);
+			
+//			de = new CMDummyEvent();
+//			de.setDummyInfo(strMessage);
+//			de.setHandlerSession(strSession);
+//			de.setHandlerGroup(strGroup);
+
+//		se.setServerListInfo(s_list);
+//		se.setServerUserCount(serverIp, cnt);
+			
+		if(!strTarget.isEmpty())
 		{
-			strMessage = messageField.getText().trim();
-			strTarget = targetField.getText().trim();
-			strSession = sessionField.getText().trim();
-			strGroup = groupField.getText().trim();
-			
-			if(strMessage.isEmpty())
-			{
-				printStyledMessage("No input message\n", "bold");
-				return;
-			}
-			
-			de = new CMDummyEvent();
-			de.setDummyInfo(strMessage);
-			de.setHandlerSession(strSession);
-			de.setHandlerGroup(strGroup);
-			
-			if(!strTarget.isEmpty())
-			{
-				m_serverStub.send(de, strTarget);
-			}
-			else
-			{
-				if(strSession.isEmpty()) strSession = null;
-				if(strGroup.isEmpty()) strGroup = null;
-				m_serverStub.cast(de, strSession, strGroup);
-			}
+			m_serverStub.send(se, strTarget);
 		}
-			
+		else
+		{
+			if(strSession.isEmpty()) strSession = null;
+			if(strGroup.isEmpty()) strGroup = null;
+			m_serverStub.cast(se, strSession, strGroup);
+		}
 	}
+	
 	public class MyKeyListener implements KeyListener {
 		public void keyPressed(KeyEvent e)
 		{
