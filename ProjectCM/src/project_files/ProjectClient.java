@@ -1339,7 +1339,6 @@ public class ProjectClient extends JFrame {
 
       if(strInput == null) return;
       
-      
       CMDummyEvent due = new CMDummyEvent();
       due.setHandlerSession(myself.getCurrentSession());
       due.setHandlerGroup(myself.getCurrentGroup());
