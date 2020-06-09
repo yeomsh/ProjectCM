@@ -218,7 +218,7 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
       if(due.getDummyInfo().equals("login2"))
       {
 		 se = new ServerListEvent(m_serverStub.getMyself().getName(),
-				 m_serverStub.getMyself().getHost(),
+				 m_serverStub.getServerAddress(),
 				 m_serverStub.getServerPort(),
 				 8888, loginedUserCnt);
          //sle.CompareAddServer();

@@ -660,7 +660,7 @@ public class ProjectServer extends JFrame {
 		
 		printMessage("====== test event transmission\n");
 		 se = new ServerListEvent(m_serverStub.getMyself().getName(),
-				 m_serverStub.getMyself().getHost(),
+				 m_serverStub.getServerAddress(),
 				 m_serverStub.getServerPort(),
 				 8888, loginedUserCnt);
 			
