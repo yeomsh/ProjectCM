@@ -1,10 +1,18 @@
 package project_files;
-import java.util.Iterator;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SocketChannel;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import kr.ac.konkuk.ccslab.cm.entity.CMMember;
+import kr.ac.konkuk.ccslab.cm.entity.CMServerInfo;
 import kr.ac.konkuk.ccslab.cm.event.CMDummyEvent;
 import kr.ac.konkuk.ccslab.cm.event.CMEvent;
 import kr.ac.konkuk.ccslab.cm.event.CMFileEvent;
@@ -214,19 +222,68 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 		String strSession = null;
 		String strGroup = null;
 		ServerListEvent se = null;
-				
+		CMServerInfo cs = new CMServerInfo();
+		
       if(due.getDummyInfo().equals("login2"))
       {
-		 se = new ServerListEvent(m_serverStub.getMyself().getName(),
-				 m_serverStub.getServerAddress(),
-				 m_serverStub.getServerPort(),
-				 8888, loginedUserCnt);
-         //sle.CompareAddServer();
-         //sle.getServerName();
-         //dummyevent 또 호출
-		if(strSession.isEmpty()) strSession = null;
-		if(strGroup.isEmpty()) strGroup = null;
-		m_serverStub.send(se, "SERVER");
+  		try {
+			File file = new File("DB.txt");
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			String line;
+			
+			int minUserCount = -1;
+			while((line = br.readLine())!=null){
+				String[] arr = line.split(", ");
+				
+				for(int i=0;i<(arr.length/5);i++) {
+					if(minUserCount == -1) {
+						minUserCount=Integer.parseInt(arr[i*5+4]);						
+						cs.setServerName(arr[i*5]);
+						cs.setServerAddress(arr[i*5+1]);
+						cs.setServerPort(Integer.parseInt(arr[i*5 + 2]));
+						cs.setServerUDPPort(8888);
+					}
+					else {
+						if(minUserCount>Integer.parseInt(arr[i*5+4])){
+							minUserCount=Integer.parseInt(arr[i*5+4]);						
+							cs.setServerName(arr[i*5]);
+							cs.setServerAddress(arr[i*5+1]);
+							cs.setServerPort(Integer.parseInt(arr[i*5 + 2]));
+							cs.setServerUDPPort(8888);
+						}
+					}
+				}
+			}
+			br.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+  		CMDummyEvent de = new CMDummyEvent();
+  		//"LOGIN2_ACK : "+cs.toString();
+		String ddstrSession = null;
+		String ddstrGroup = null;
+  		
+  		String strMessage = "LOGIN2_ACK : "+cs.toString();
+		de.setDummyInfo(strMessage);
+		de.setHandlerSession(ddstrSession);
+		de.setHandlerGroup(ddstrGroup);
+		de.setReceiver(cme.getSender());
+		de.setSender(cme.getReceiver());
+
+  		m_serverStub.send(de, de.getReceiver());
+  		
+//		 se = new ServerListEvent("hyohyohyo",
+//				 m_serverStub.getServerAddress(),
+//				 m_serverStub.getServerPort(),
+//				 8888, loginedUserCnt);
+//         //sle.CompareAddServer();
+//         //sle.getServerName();
+//         //dummyevent 또 호출
+//		if(strSession.isEmpty()) strSession = null;
+//		if(strGroup.isEmpty()) strGroup = null;
+//		m_serverStub.send(se, "SERVER");
+		
       }
       
       return;

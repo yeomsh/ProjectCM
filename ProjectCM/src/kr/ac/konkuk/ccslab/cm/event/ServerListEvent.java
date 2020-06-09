@@ -122,11 +122,12 @@ public class ServerListEvent extends CMEvent {
 //	      recStr = getStringFromByteBuffer(msg);
 		String[] arr = recStr.split(", ");
 		for(int i=0;i<(arr.length/5);i++) {
-			cs.setServerAddress(arr[i*5]);
-			cs.setServerName(arr[i*5+1]);
+			cs.setServerName(arr[i*5]);
+			cs.setServerAddress(arr[i*5+1]);
 			cs.setServerPort(Integer.parseInt(arr[i*5 + 2]));
+			cs.setServerUDPPort(8888);
 			p_serverList.add(cs);
-			serverHashMap.put(arr[1], Integer.parseInt(arr[i*5+4]));
+			serverHashMap.put(arr[i*5+1], Integer.parseInt(arr[i*5+4]));
 		}
 		
 		serverHashMap.put(serverIp,cnt);
@@ -134,7 +135,7 @@ public class ServerListEvent extends CMEvent {
 		recStr="";
 		for (int i = 0; i < p_serverList.size(); i++) {
 			serverHashMap.put(p_serverList.get(i).getServerAddress(), 0);
-			recStr += (p_serverList.get(i) + serverHashMap.get(p_serverList.get(i).getServerAddress()).toString())+"\n";
+			recStr += (p_serverList.get(i).toString()+", " + serverHashMap.get(p_serverList.get(i).getServerAddress()).toString())+", ";
 		}
 		try {
 			OutputStream output = new FileOutputStream("DB.txt", false);
