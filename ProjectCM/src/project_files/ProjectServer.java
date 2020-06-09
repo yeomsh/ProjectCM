@@ -30,6 +30,7 @@ import kr.ac.konkuk.ccslab.cm.entity.CMMember;
 import kr.ac.konkuk.ccslab.cm.entity.CMServerInfo;
 import kr.ac.konkuk.ccslab.cm.entity.CMSession;
 import kr.ac.konkuk.ccslab.cm.entity.CMUser;
+import kr.ac.konkuk.ccslab.cm.event.CMDummyEvent;
 import kr.ac.konkuk.ccslab.cm.info.CMInfo;
 import kr.ac.konkuk.ccslab.cm.info.CMInteractionInfo;
 import kr.ac.konkuk.ccslab.cm.manager.CMCommManager;
@@ -368,6 +369,9 @@ public class ProjectServer extends JFrame {
 			case "test output network throughput":
 				measureOutputThroughput();
 				break;
+			case "send CMDummyEvent":
+				sendCMDummyEvent();
+				break;
 //			case "set file path":
 //				setFilePath();
 //				break;
@@ -555,6 +559,15 @@ public class ProjectServer extends JFrame {
 		
 		serviceMenu.add(infoSubMenu);
 		
+	serviceMenu.add(infoSubMenu);
+		
+		JMenu eventTransmissionSubMenu = new JMenu("Event Transmission");
+		JMenuItem sendDummyEventMenuItem = new JMenuItem("send CMDummyEvent");
+		sendDummyEventMenuItem.addActionListener(menuListener);
+		eventTransmissionSubMenu.add(sendDummyEventMenuItem);
+		
+		serviceMenu.add(eventTransmissionSubMenu);
+		
 		JMenu fileTransferSubMenu = new JMenu("File Transfer");
 		JMenuItem setPathMenuItem = new JMenuItem("set file path");
 		setPathMenuItem.addActionListener(menuListener);
@@ -628,7 +641,59 @@ public class ProjectServer extends JFrame {
 		
 		setJMenuBar(menuBar);
 	}
-	
+	public void sendCMDummyEvent()
+	{
+		String strMessage = null;
+		String strTarget = null;
+		String strSession = null;
+		String strGroup = null;
+		CMDummyEvent de = null;
+		printMessage("====== test event transmission\n");
+
+		JTextField messageField = new JTextField();
+		JTextField targetField = new JTextField();
+		JTextField sessionField = new JTextField();
+		JTextField groupField = new JTextField();
+		
+		Object[] msg = {
+			"Dummy message: ", messageField,
+			"Target name (for send()): ", targetField,
+			"Target session (for cast() or broadcast()): ", sessionField,
+			"Target group (for cast() or broadcast()): ", groupField
+		};
+		int option = JOptionPane.showConfirmDialog(null, msg, "CMDummyEvent Transmission", 
+				JOptionPane.OK_CANCEL_OPTION);
+		if(option == JOptionPane.OK_OPTION)
+		{
+			strMessage = messageField.getText().trim();
+			strTarget = targetField.getText().trim();
+			strSession = sessionField.getText().trim();
+			strGroup = groupField.getText().trim();
+			
+			if(strMessage.isEmpty())
+			{
+				printStyledMessage("No input message\n", "bold");
+				return;
+			}
+			
+			de = new CMDummyEvent();
+			de.setDummyInfo(strMessage);
+			de.setHandlerSession(strSession);
+			de.setHandlerGroup(strGroup);
+			
+			if(!strTarget.isEmpty())
+			{
+				m_serverStub.send(de, strTarget);
+			}
+			else
+			{
+				if(strSession.isEmpty()) strSession = null;
+				if(strGroup.isEmpty()) strGroup = null;
+				m_serverStub.cast(de, strSession, strGroup);
+			}
+		}
+			
+	}
 	public class MyKeyListener implements KeyListener {
 		public void keyPressed(KeyEvent e)
 		{
