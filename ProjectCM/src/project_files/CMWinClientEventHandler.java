@@ -567,7 +567,12 @@ public class CMWinClientEventHandler implements CMAppEventHandler{
 			info = addr.split(", ");
 			System.out.println(info[0]);
 			
-			boolean bret = m_clientStub.connectToServer(info[0]);
+			//boolean bret = m_clientStub.connectToServer(info[0]);
+			
+		CMMultiServerEvent mse = new CMMultiServerEvent();
+			mse.setID(CMMultiServerEvent.REQ_SERVER_INFO);
+			mse.setUserName(m_clientStub.getMyself().getName());
+			m_clientStub.send(mse,"SERVER");
 			
 			/*CMDummyEvent de = new CMDummyEvent();
 			due.setDummyInfo("CM_SEND_USER_LIST_EVENT");

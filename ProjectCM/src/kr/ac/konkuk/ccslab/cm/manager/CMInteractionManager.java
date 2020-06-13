@@ -285,6 +285,7 @@ public class CMInteractionManager {
 		return true;
 	}
 	
+	
 	// disconnect from an additional server
 	public static boolean disconnectFromAddServer(String strName, CMInfo cmInfo)
 	{
@@ -2979,8 +2980,9 @@ public class CMInteractionManager {
 			server.setKeepAliveTime(cmInfo.getConfigurationInfo().getKeepAliveTime());
 		
 		server.setLastEventTransTime(System.currentTimeMillis());
-		bRet = interInfo.addAddServer(server);
 		
+		//bRet = interInfo.addAddServer(server);
+		if(bRet = interInfo.addAddServer(server)) {
 		// remove channel from unknown-channel list
 		CMList<CMUnknownChannelInfo> unchInfoList = commInfo.getUnknownChannelInfoList();
 		bRet = unchInfoList.removeElement(new CMUnknownChannelInfo((SocketChannel)msg.m_ch));
@@ -2994,7 +2996,7 @@ public class CMInteractionManager {
 			System.err.println("CMInteractionManager.processREQ_SERVER_REG(), error to "
 					+"remove from unknown-channel list: "+msg.m_ch);
 		}
-
+		}
 		// send response event
 		CMMultiServerEvent mseAck = new CMMultiServerEvent();
 		mseAck.setID( CMMultiServerEvent.RES_SERVER_REG );

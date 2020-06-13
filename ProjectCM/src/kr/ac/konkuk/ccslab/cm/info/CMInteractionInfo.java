@@ -275,7 +275,7 @@ public class CMInteractionInfo {
 		CMServer tServer = null;
 		boolean bFound = false;
 		Iterator<CMServer> iter = m_addServerList.iterator();
-		
+		//System.out.println(m_addServerList.get(0));
 		while(iter.hasNext() && !bFound)
 		{
 			tServer = iter.next();

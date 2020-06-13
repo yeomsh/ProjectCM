@@ -291,7 +291,7 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 			m_serverStub.cast(d,ddstrSession,ddstrGroup);
 			
 			try {
-				Thread.sleep(3000);
+				Thread.sleep(5000);
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -377,8 +377,8 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 
 			try {
 				InetAddress ip = InetAddress.getLocalHost();
-				se = new ServerListEvent(m_serverStub.getMyself().getName(), ip.getHostAddress(),
-						m_serverStub.getServerPort(), 8888, loginedUserCnt);
+				se = new ServerListEvent(m_serverStub.getMyself().getName()+"zvcz", ip.getHostAddress(),
+						m_serverStub.getServerPort(), 8888,4);//loginedUserCn
 			} catch (UnknownHostException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
