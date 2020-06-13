@@ -58,6 +58,7 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 	private int m_nCurNumFilesPerSession;
 	
 	private int count=0;
+	private String name;
 
 	public CMWinServerEventHandler(CMServerStub serverStub, ProjectServer server) {
 		m_server = server;
@@ -111,6 +112,7 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 	private void processServerListEvent(CMEvent cme) {
 		// TODO Auto-generated method stub
 		count++;
+		System.out.println(count+"adf");
 		if(count==1)
 		{
 			requestLogin2(cme);
@@ -178,14 +180,10 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 			}
 			CMDummyEvent de = new CMDummyEvent();
 			// "LOGIN2_ACK : "+cs.toString();
-			String ddstrSession = null;
-			String ddstrGroup = null;
 
 			String strMessage = "LOGIN2_ACK : " + cs.toString() +", " +minUserCount;
 			de.setDummyInfo(strMessage);
-			de.setHandlerSession(ddstrSession);
-			de.setHandlerGroup(ddstrGroup);
-			de.setReceiver(cme.getSender());
+			de.setReceiver(name);
 			de.setSender("SERVER");
 
 			System.out.println(de.getReceiver() + ", ~~~" + de.getDummyInfo());
@@ -324,6 +322,7 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 			// "LOGIN2_ACK : "+cs.toString();
 			String ddstrSession = null;
 			String ddstrGroup = null;
+			name = cme.getSender();
 
 			String strMessage = "CM_SEND_USER_LIST_EVENT";
 			de.setDummyInfo(strMessage);
