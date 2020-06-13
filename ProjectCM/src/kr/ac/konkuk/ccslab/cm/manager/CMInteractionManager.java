@@ -21,6 +21,7 @@ import kr.ac.konkuk.ccslab.cm.entity.CMSession;
 import kr.ac.konkuk.ccslab.cm.entity.CMSessionInfo;
 import kr.ac.konkuk.ccslab.cm.entity.CMUnknownChannelInfo;
 import kr.ac.konkuk.ccslab.cm.entity.CMUser;
+import kr.ac.konkuk.ccslab.cm.event.CMDummyEvent;
 import kr.ac.konkuk.ccslab.cm.event.CMEvent;
 import kr.ac.konkuk.ccslab.cm.event.CMMultiServerEvent;
 import kr.ac.konkuk.ccslab.cm.event.CMSessionEvent;
@@ -733,6 +734,12 @@ public class CMInteractionManager {
 				bReturn = processSessionEvent(msg, cmInfo);
 				bProcessed = true;
 				break;
+			case CMInfo.CM_DUMMY_EVENT:
+				if(CMInfo._CM_DEBUG)
+				{
+					System.out.println("CMInteractionManger.processEvent(),dummyevent");
+				}
+				bProcessed = true;
 			case CMInfo.CM_MULTI_SERVER_EVENT:
 				processMultiServerEvent(msg, cmInfo);
 				bProcessed = true;
