@@ -1094,7 +1094,7 @@ public class ProjectClient extends JFrame {
       printMessage("======\n");      
       try {
 		Thread.sleep(3000);
-		testDummyEvent2("requestLogin2");
+		testDummyEvent2("login2");
 	} catch (InterruptedException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();

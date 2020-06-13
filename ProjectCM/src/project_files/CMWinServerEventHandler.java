@@ -56,6 +56,8 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 	private String m_strFileReceiver;
 	private int m_nTotalNumFilesPerSession;
 	private int m_nCurNumFilesPerSession;
+	
+	private int count=0;
 
 	public CMWinServerEventHandler(CMServerStub serverStub, ProjectServer server) {
 		m_server = server;
@@ -98,9 +100,27 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 		case CMInfo.CM_MQTT_EVENT:
 			processMqttEvent(cme);
 			break;
+		case CMInfo.CM_SERVER_LIST_EVENT:
+			processServerListEvent(cme);
+			break;
 		default:
 			return;
 		}
+	}
+
+	private void processServerListEvent(CMEvent cme) {
+		// TODO Auto-generated method stub
+		CMDummyEvent d = new CMDummyEvent();
+		String ddstrSession = null;
+		String ddstrGroup = null;
+
+		String strMessage = "requestLogin2";
+		d.setDummyInfo(strMessage);
+		d.setHandlerSession(m_serverStub.getMyself().getCurrentSession());
+		d.setHandlerGroup(m_serverStub.getMyself().getCurrentGroup());
+
+		m_serverStub.send(d,"SERVER");
+//		
 	}
 
 	private void processSessionEvent(CMEvent cme) {
@@ -278,24 +298,19 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 		}
 		else if (due.getDummyInfo().equals("requestLogin2")) {
 			int minUserCount = -1;
-			CMDummyEvent d = new CMDummyEvent();
-			// "LOGIN2_ACK : "+cs.toString();
-			String ddstrSession = null;
-			String ddstrGroup = null;
-
-			String strMessage = "CM_SEND_USER_LIST_EVENT";
-			d.setDummyInfo(strMessage);
-			d.setHandlerSession(m_serverStub.getMyself().getCurrentSession());
-			d.setHandlerGroup(m_serverStub.getMyself().getCurrentGroup());
-
-			m_serverStub.cast(d,ddstrSession,ddstrGroup);
-			
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+//			CMDummyEvent d = new CMDummyEvent();
+//			// "LOGIN2_ACK : "+cs.toString();
+//			String ddstrSession = null;
+//			String ddstrGroup = null;
+//
+//			String strMessage = "CM_SEND_USER_LIST_EVENT";
+//			d.setDummyInfo(strMessage);
+//			d.setHandlerSession(m_serverStub.getMyself().getCurrentSession());
+//			d.setHandlerGroup(m_serverStub.getMyself().getCurrentGroup());
+//
+//			m_serverStub.cast(d,ddstrSession,ddstrGroup);
+			count++;
+			if(count==1) {
 			
 			try {
 				File file = new File("DB.txt");
@@ -330,10 +345,10 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 			}
 			CMDummyEvent de = new CMDummyEvent();
 			// "LOGIN2_ACK : "+cs.toString();
-			 ddstrSession = null;
-			 ddstrGroup = null;
+			String ddstrSession = null;
+			String ddstrGroup = null;
 
-			 strMessage = "LOGIN2_ACK : " + cs.toString() +", " +minUserCount;
+			String strMessage = "LOGIN2_ACK : " + cs.toString() +", " +minUserCount;
 			de.setDummyInfo(strMessage);
 			de.setHandlerSession(ddstrSession);
 			de.setHandlerGroup(ddstrGroup);
@@ -341,7 +356,7 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 			de.setSender("SERVER");
 
 			System.out.println(de.getReceiver() + ", ~~~" + de.getDummyInfo());
-			m_serverStub.send(de, de.getReceiver());
+			m_serverStub.send(de, de.getReceiver());}
 
 		}
 		// se = new ServerListEvent("hyohyohyo",
