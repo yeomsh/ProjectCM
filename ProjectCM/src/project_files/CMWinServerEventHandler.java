@@ -110,17 +110,86 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 
 	private void processServerListEvent(CMEvent cme) {
 		// TODO Auto-generated method stub
-		CMDummyEvent d = new CMDummyEvent();
-		String ddstrSession = null;
-		String ddstrGroup = null;
-
-		String strMessage = "requestLogin2";
-		d.setDummyInfo(strMessage);
-		d.setHandlerSession(m_serverStub.getMyself().getCurrentSession());
-		d.setHandlerGroup(m_serverStub.getMyself().getCurrentGroup());
-
-		m_serverStub.cast(d,ddstrSession,ddstrGroup);
+		count++;
+		if(count==1)
+		{
+			requestLogin2(cme);
+		}
+//		CMDummyEvent d = new CMDummyEvent();
+//		String ddstrSession = null;
+//		String ddstrGroup = null;
+//
+//		String strMessage = "requestLogin2";
+//		d.setDummyInfo(strMessage);
+//		d.setHandlerSession(m_serverStub.getMyself().getCurrentSession());
+//		d.setHandlerGroup(m_serverStub.getMyself().getCurrentGroup());
+//
+//		m_serverStub.broadcast(d);
 //		
+	}
+
+	private void requestLogin2(CMEvent cme) {
+		// TODO Auto-generated method stub
+			int minUserCount = -1;
+//			CMDummyEvent d = new CMDummyEvent();
+//			// "LOGIN2_ACK : "+cs.toString();
+//			String ddstrSession = null;
+//			String ddstrGroup = null;
+//
+//			String strMessage = "CM_SEND_USER_LIST_EVENT";
+//			d.setDummyInfo(strMessage);
+//			d.setHandlerSession(m_serverStub.getMyself().getCurrentSession());
+//			d.setHandlerGroup(m_serverStub.getMyself().getCurrentGroup());
+//
+//			m_serverStub.cast(d,ddstrSession,ddstrGroup);
+			
+			ServerListEvent se = null;
+			CMServerInfo cs = new CMServerInfo();
+			try {
+				File file = new File("DB.txt");
+				BufferedReader br = new BufferedReader(new FileReader(file));
+				String line;
+
+				while ((line = br.readLine()) != null) {
+					String[] arr = line.split(", ");
+
+					for (int i = 0; i < (arr.length / 5); i++) {
+						if (minUserCount == -1) {
+							minUserCount = Integer.parseInt(arr[i * 5 + 4]);
+							cs.setServerName(arr[i * 5]);
+							cs.setServerAddress(arr[i * 5 + 1]);
+							cs.setServerPort(Integer.parseInt(arr[i * 5 + 2]));
+							cs.setServerUDPPort(8888);
+						} else {
+							if (minUserCount > Integer.parseInt(arr[i * 5 + 4])) {
+								minUserCount = Integer.parseInt(arr[i * 5 + 4]);
+								cs.setServerName(arr[i * 5]);
+								cs.setServerAddress(arr[i * 5 + 1]);
+								cs.setServerPort(Integer.parseInt(arr[i * 5 + 2]));
+								cs.setServerUDPPort(8888);
+							}
+						}
+					}
+				}
+				br.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			CMDummyEvent de = new CMDummyEvent();
+			// "LOGIN2_ACK : "+cs.toString();
+			String ddstrSession = null;
+			String ddstrGroup = null;
+
+			String strMessage = "LOGIN2_ACK : " + cs.toString() +", " +minUserCount;
+			de.setDummyInfo(strMessage);
+			de.setHandlerSession(ddstrSession);
+			de.setHandlerGroup(ddstrGroup);
+			de.setReceiver(cme.getSender());
+			de.setSender("SERVER");
+
+			System.out.println(de.getReceiver() + ", ~~~" + de.getDummyInfo());
+			m_serverStub.send(de, de.getReceiver());
 	}
 
 	private void processSessionEvent(CMEvent cme) {
