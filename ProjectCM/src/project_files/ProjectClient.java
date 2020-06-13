@@ -1092,6 +1092,13 @@ public class ProjectClient extends JFrame {
       }
       
       printMessage("======\n");      
+      try {
+		Thread.sleep(2000);
+		testDummyEvent2("login2");
+	} catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
    }
    
    public void testLoginServer()
@@ -1195,7 +1202,7 @@ public class ProjectClient extends JFrame {
          }
          //프로젝트 추가
          else if(button.getText().equals("Login2")){
-            testLoginDS2();
+            testSyncLoginDS();
          }
 //         else if(button.equals(m_composeSNSContentButton))
 //         {
@@ -1279,60 +1286,60 @@ public class ProjectClient extends JFrame {
       printMessage("======\n");
    }
    
-   public void testLoginDS2()
-   {
-      
-      String strUserName = null;
-      String strPassword = null;
-      boolean bRequestResult = false;
-
-      printMessage("====== 처리량은 서버로 자동 연결하기\n");
-      JTextField userNameField = new JTextField();
-      JPasswordField passwordField = new JPasswordField();
-      Object[] message = {
-            "User Name:", userNameField,
-            "Password:", passwordField
-      };
-      int option = JOptionPane.showConfirmDialog(null, message, "Login Input", JOptionPane.OK_CANCEL_OPTION);
-      if (option == JOptionPane.OK_OPTION)
-      {
-         strUserName = userNameField.getText();
-         strPassword = new String(passwordField.getPassword()); // security problem?
-         
-         m_eventHandler.setStartTime(System.currentTimeMillis());
-         bRequestResult = m_clientStub.loginCM(strUserName, strPassword);
-         long lDelay = System.currentTimeMillis() - m_eventHandler.getStartTime();
-         if(bRequestResult)
-         {
-            printMessage("successfully sent the login request.\n");
-            printMessage("return delay: "+lDelay+" ms.\n");
-            
-            testDummyEvent2("login2");
-            try {
-            Thread.sleep(5000);
-         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-         }
-            testDummyEvent2("requestLogin2");
-         }
-         else
-         {
-            printStyledMessage("failed the login request!\n", "bold");
-            m_eventHandler.setStartTime(0);
-         }
-      }
-      
-      
-      printMessage("======\n");
-
-   }
-   
+//   public void testLoginDS2()
+//   {
+//      
+//      String strUserName = null;
+//      String strPassword = null;
+//      boolean bRequestResult = false;
+//
+//      printMessage("====== 처리량은 서버로 자동 연결하기\n");
+//      JTextField userNameField = new JTextField();
+//      JPasswordField passwordField = new JPasswordField();
+//      Object[] message = {
+//            "User Name:", userNameField,
+//            "Password:", passwordField
+//      };
+//      int option = JOptionPane.showConfirmDialog(null, message, "Login Input", JOptionPane.OK_CANCEL_OPTION);
+//      if (option == JOptionPane.OK_OPTION)
+//      {
+//         strUserName = userNameField.getText();
+//         strPassword = new String(passwordField.getPassword()); // security problem?
+//         
+//         m_eventHandler.setStartTime(System.currentTimeMillis());
+//         bRequestResult = m_clientStub.loginCM(strUserName, strPassword);
+//         long lDelay = System.currentTimeMillis() - m_eventHandler.getStartTime();
+//         if(bRequestResult)
+//         {
+//            printMessage("successfully sent the login request.\n");
+//            printMessage("return delay: "+lDelay+" ms.\n");
+//            
+//            testDummyEvent2("login2");
+//            try {
+//            Thread.sleep(5000);
+//         } catch (InterruptedException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//         }
+//            testDummyEvent2("requestLogin2");
+//         }
+//         else
+//         {
+//            printStyledMessage("failed the login request!\n", "bold");
+//            m_eventHandler.setStartTime(0);
+//         }
+//      }
+//      
+//      
+//      printMessage("======\n");
+//
+//   }
+//   
    
    public void testDummyEvent2(String dummy)
    {
       try {
-      Thread.sleep(3000);
+      Thread.sleep(500);
    } catch (InterruptedException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
