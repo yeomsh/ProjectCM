@@ -58,7 +58,8 @@ public class CMWinClientEventHandler implements CMAppEventHandler{
 	private String[] m_filePieces;		// for distributed file processing
 	private boolean m_bReqAttachedFile;	// for storing the fact that the client requests an attachment
 	private int m_nMinNumWaitedEvents;  // for checking the completion of asynchronous castrecv service
-	private int m_nRecvReplyEvents;		// for checking the completion of asynchronous castrecv service
+	private int m_nRecvReplyEvents;	// for checking the completion of asynchronous castrecv service
+	private String[] info;
 	
 	// information for csc-ftp and c2c-ftp experiments
 	private String m_strFileSender;
@@ -338,11 +339,16 @@ public class CMWinClientEventHandler implements CMAppEventHandler{
 		case CMInfo.CM_MQTT_EVENT:
 			processMqttEvent(cme);
 			break;
+			//팀플수정: 팀프로젝트에서 만든 API이벤트 케이스를 추가함
 		default:
 			return;
 		}	
 	}
-	
+	/* 팀플수정:
+	 * 해당 메소드 설명
+	 * additional server에서 CM_SEND_USER_LIST_EVENT 더미 이벤트를 받으면 자기 자신의 정보를 디폴트서버에게 저장함
+	 */
+
 	private void processSessionEvent(CMEvent cme)
 	{
 		long lDelay = 0;
@@ -549,7 +555,27 @@ public class CMWinClientEventHandler implements CMAppEventHandler{
 		//System.out.println("session("+due.getHandlerSession()+"), group("+due.getHandlerGroup()+")");
 		printMessage("session("+due.getHandlerSession()+"), group("+due.getHandlerGroup()+")\n");
 		//System.out.println("dummy msg: "+due.getDummyInfo());
+		/*은지:
+		 전제조건 : 클라이언트 (requsetLogin2)더미이벤트 전송하면 서버에서는 ACK을 보내는데  최소카운트를 가진 서버 명을 전달
+		클라이언트는 ACK을 받고 cast를 통해서 
+		 */
 		printMessage("dummy msg: "+due.getDummyInfo()+"\n");
+		if(due.getDummyInfo().contains("LOGIN2_ACK"))
+		{
+			System.out.println("연결부분");
+			String addr = due.getDummyInfo().substring(due.getDummyInfo().lastIndexOf(":")+2);
+			info = addr.split(", ");
+			System.out.println(info[0]);
+			
+			boolean bret = m_clientStub.connectToServer(info[0]);
+			
+			/*CMDummyEvent de = new CMDummyEvent();
+			due.setDummyInfo("CM_SEND_USER_LIST_EVENT");
+			//은지: 클라이언트에서 cast를 통해 세션에 있는 모든 additional 서버가 디폴트 서버에게 자신의 상태를 전달하도록 한다. =>  login2 dummy event 사용할 필요 없어짐
+			m_clientStub.cast(de,m_clientStub.getMyself().getCurrentSession(),m_clientStub.getMyself().getCurrentGroup());
+		*/
+		}
+				
 		return;
 	}
 	
@@ -1332,6 +1358,18 @@ public class CMWinClientEventHandler implements CMAppEventHandler{
 				//		si.getServerAddress(), si.getServerPort(), si.getServerUDPPort());
 				printMessage(String.format("%-20s %-20s %-10d %-10d%n", si.getServerName(), 
 						si.getServerAddress(), si.getServerPort(), si.getServerUDPPort()));
+			}
+			boolean bret = m_clientStub.connectToServer(info[0]);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(bret)
+			{
+				System.out.println("afsd");
+				m_clientStub.loginCM(info[0], m_clientStub.getMyself().getName(),m_clientStub.getMyself().getPasswd());
 			}
 			break;
 		case CMMultiServerEvent.NOTIFY_SERVER_LEAVE:

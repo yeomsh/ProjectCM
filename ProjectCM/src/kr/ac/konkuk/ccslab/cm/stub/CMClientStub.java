@@ -2581,7 +2581,7 @@ public class CMClientStub extends CMStub {
 	 * </table>
 	 * 
 	 */
-	public void requestServerInfo()
+	public synchronized void requestServerInfo()
 	{
 		CMUser myself = getMyself();
 		int state = myself.getState();

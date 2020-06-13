@@ -238,12 +238,14 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 
 			String strMessage = "CM_SEND_USER_LIST_EVENT";
 			de.setDummyInfo(strMessage);
-			de.setHandlerSession(ddstrSession);
-			de.setHandlerGroup(ddstrGroup);
+			de.setHandlerSession(m_serverStub.getMyself().getCurrentSession());
+			de.setHandlerGroup(m_serverStub.getMyself().getCurrentGroup());
 
 			// de.setReceiver(cme.getSender());
 			// de.setSender("SERVER");
-			File file = new File("DB.txt");
+		/*
+		 * 팀플수정: 이 부분은 DB와 디폴트 서버에 있는 리스트들이 똑같기 때문에 cast를 이용해서 한번에 보내면 될 것 같음
+		 * 	File file = new File("DB.txt");
 			BufferedReader br;
 			try {
 				br = new BufferedReader(new FileReader(file));
@@ -264,17 +266,37 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 				de.setReceiver(cs.getServerName());
 				System.out.println(cs.getServerName() + "+ ~~~~~~~~~~~~~~~~~~~");
 				m_serverStub.send(de, de.getReceiver());
-			}
+			}*/
 
 			// for()
 			// additional server가 내용 보내줌
 			// db.txt 저장
 			// additional server로부터 처리량 다 받은 후 아래 내용 수행
 			// 가장 처리량 적은 additional server 고른 후 client에게 보내기
+			
+			m_serverStub.cast(de,ddstrSession,ddstrGroup);
 		}
 		else if (due.getDummyInfo().equals("requestLogin2")) {
 			int minUserCount = -1;
+			CMDummyEvent d = new CMDummyEvent();
+			// "LOGIN2_ACK : "+cs.toString();
+			String ddstrSession = null;
+			String ddstrGroup = null;
 
+			String strMessage = "CM_SEND_USER_LIST_EVENT";
+			d.setDummyInfo(strMessage);
+			d.setHandlerSession(m_serverStub.getMyself().getCurrentSession());
+			d.setHandlerGroup(m_serverStub.getMyself().getCurrentGroup());
+
+			m_serverStub.cast(d,ddstrSession,ddstrGroup);
+			
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
 			try {
 				File file = new File("DB.txt");
 				BufferedReader br = new BufferedReader(new FileReader(file));
@@ -308,10 +330,10 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 			}
 			CMDummyEvent de = new CMDummyEvent();
 			// "LOGIN2_ACK : "+cs.toString();
-			String ddstrSession = null;
-			String ddstrGroup = null;
+			 ddstrSession = null;
+			 ddstrGroup = null;
 
-			String strMessage = "LOGIN2_ACK : " + cs.toString() +", " +minUserCount;
+			 strMessage = "LOGIN2_ACK : " + cs.toString() +", " +minUserCount;
 			de.setDummyInfo(strMessage);
 			de.setHandlerSession(ddstrSession);
 			de.setHandlerGroup(ddstrGroup);
@@ -336,6 +358,8 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 		else if (due.getDummyInfo().equals("CM_SEND_USER_LIST_EVENT"))
 
 		{
+			if(due.getReceiver()!="SERVER")
+			{
 			// 로그인한 유저 수 가져오기
 			loginUsers = m_serverStub.getLoginUsers();
 			loginedUserCnt = loginUsers.getMemberNum();
@@ -375,7 +399,8 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 					strSession = null;
 				if (strGroup.isEmpty())
 					strGroup = null;
-				m_serverStub.cast(se, strSession, strGroup);
+				m_serverStub.send(se, strTarget);
+			}
 			}
 		}
 		return;
