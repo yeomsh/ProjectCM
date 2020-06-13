@@ -120,6 +120,7 @@ public class ServerListEvent extends CMEvent {
 	public void writeServerList(String serverIp,int cnt) {
 		readServerList();
 //	      recStr = getStringFromByteBuffer(msg);
+		p_serverList.clear();
 		String[] arr = recStr.split(", ");
 		for(int i=0;i<(arr.length/5);i++) {
 			cs.setServerName(arr[i*5]);
@@ -130,12 +131,15 @@ public class ServerListEvent extends CMEvent {
 			serverHashMap.put(arr[i*5+1], Integer.parseInt(arr[i*5+4]));
 		}
 		
+		
 		serverHashMap.put(serverIp,cnt);
+		
+		System.out.println("?????????????"
+				+ p_serverList + "hashMap : " + serverHashMap);
 
 		recStr="";
 		for (int i = 0; i < p_serverList.size(); i++) {
-			serverHashMap.put(p_serverList.get(i).getServerAddress(), 0);
-			recStr += (p_serverList.get(i).toString()+", " + serverHashMap.get(p_serverList.get(i).getServerAddress()).toString())+", ";
+			recStr += (p_serverList.get(i).toString()+", " + serverHashMap.get(p_serverList.get(i).getServerAddress()).toString()+", ");
 		}
 		try {
 			OutputStream output = new FileOutputStream("DB.txt", false);

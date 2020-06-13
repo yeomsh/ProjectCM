@@ -744,8 +744,8 @@ public class CMInteractionManager {
 				break;
 			case CMInfo.CM_SERVER_LIST_EVENT:
 				if(CMInfo._CM_DEBUG) {
-					System.out.println("??????");
-					System.out.print((ServerListEvent)cmEvent + ", " + cmInfo);
+					//System.out.println("??????");
+					//System.out.print((ServerListEvent)cmEvent + ", " + cmInfo);
 					//System.out.println("CMInteractionManager.processEvent(), serverListEvent, nothing to do.");
 				}
 				else {

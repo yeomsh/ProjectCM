@@ -164,12 +164,12 @@ public class CMEventManager {
 			ServerListEvent sle = new ServerListEvent(buf);
 //			System.out.println("!!!!" + sle.getRecStr());
 			String getrecStr = sle.getRecStr();
+			//System.out.println(sle.getRecStr() + "~~~~~~~~~~");			
 			
 			String[] arr = getrecStr.split(", ");
 			//arr[0] name, arr[1] ip, arr[2] port, arr[3] udp, arr[4] usercnt
 			
 			sle.writeServerList(arr[1], Integer.parseInt(arr[4]));
-			System.out.println(sle.getServerListInfo().get(0));
 			
 			return sle;
 		default:
