@@ -574,11 +574,11 @@ public class CMWinClientEventHandler implements CMAppEventHandler{
 			mse.setUserName(m_clientStub.getMyself().getName());
 			m_clientStub.send(mse,"SERVER");
 			
-			/*CMDummyEvent de = new CMDummyEvent();
+			CMDummyEvent de = new CMDummyEvent();
 			due.setDummyInfo("CM_SEND_USER_LIST_EVENT");
 			//은지: 클라이언트에서 cast를 통해 세션에 있는 모든 additional 서버가 디폴트 서버에게 자신의 상태를 전달하도록 한다. =>  login2 dummy event 사용할 필요 없어짐
 			m_clientStub.cast(de,m_clientStub.getMyself().getCurrentSession(),m_clientStub.getMyself().getCurrentGroup());
-		*/
+		
 		}
 				
 		return;

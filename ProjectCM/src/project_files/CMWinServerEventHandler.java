@@ -119,7 +119,7 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 		d.setHandlerSession(m_serverStub.getMyself().getCurrentSession());
 		d.setHandlerGroup(m_serverStub.getMyself().getCurrentGroup());
 
-		m_serverStub.send(d,"SERVER");
+		m_serverStub.cast(d,ddstrSession,ddstrGroup);
 //		
 	}
 
@@ -261,11 +261,9 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 			de.setHandlerSession(m_serverStub.getMyself().getCurrentSession());
 			de.setHandlerGroup(m_serverStub.getMyself().getCurrentGroup());
 
-			// de.setReceiver(cme.getSender());
-			// de.setSender("SERVER");
-		/*
-		 * 팀플수정: 이 부분은 DB와 디폴트 서버에 있는 리스트들이 똑같기 때문에 cast를 이용해서 한번에 보내면 될 것 같음
-		 * 	File file = new File("DB.txt");
+			de.setReceiver(cme.getSender());
+			de.setSender("SERVER");
+		  	File file = new File("DB.txt");
 			BufferedReader br;
 			try {
 				br = new BufferedReader(new FileReader(file));
@@ -286,7 +284,7 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 				de.setReceiver(cs.getServerName());
 				System.out.println(cs.getServerName() + "+ ~~~~~~~~~~~~~~~~~~~");
 				m_serverStub.send(de, de.getReceiver());
-			}*/
+			}
 
 			// for()
 			// additional server가 내용 보내줌
@@ -294,7 +292,7 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 			// additional server로부터 처리량 다 받은 후 아래 내용 수행
 			// 가장 처리량 적은 additional server 고른 후 client에게 보내기
 			
-			m_serverStub.cast(de,ddstrSession,ddstrGroup);
+			//m_serverStub.cast(de,ddstrSession,ddstrGroup);
 		}
 		else if (due.getDummyInfo().equals("requestLogin2")) {
 			int minUserCount = -1;
@@ -310,7 +308,7 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 //
 //			m_serverStub.cast(d,ddstrSession,ddstrGroup);
 			count++;
-			if(count==1) {
+			if(count==1&&m_serverStub.getMyself().getName().equals("SERVER")) {
 			
 			try {
 				File file = new File("DB.txt");
