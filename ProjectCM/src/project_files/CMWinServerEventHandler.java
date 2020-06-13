@@ -318,7 +318,7 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 			de.setReceiver(cme.getSender());
 			de.setSender("SERVER");
 
-			System.out.println(de.getReceiver() + ", ~~~" + de.getDummyInfo() +minUserCount);
+			System.out.println(de.getReceiver() + ", ~~~" + de.getDummyInfo());
 			m_serverStub.send(de, de.getReceiver());
 
 		}

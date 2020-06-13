@@ -42,7 +42,6 @@ import kr.ac.konkuk.ccslab.cm.entity.CMUser;
 import kr.ac.konkuk.ccslab.cm.event.CMDummyEvent;
 import kr.ac.konkuk.ccslab.cm.event.CMInterestEvent;
 import kr.ac.konkuk.ccslab.cm.event.CMSessionEvent;
-import kr.ac.konkuk.ccslab.cm.event.ServerListEvent;
 import kr.ac.konkuk.ccslab.cm.info.CMConfigurationInfo;
 import kr.ac.konkuk.ccslab.cm.info.CMInfo;
 import kr.ac.konkuk.ccslab.cm.info.CMInteractionInfo;
@@ -1282,6 +1281,7 @@ public class ProjectClient extends JFrame {
    
    public void testLoginDS2()
    {
+      
       String strUserName = null;
       String strPassword = null;
       boolean bRequestResult = false;
@@ -1308,6 +1308,13 @@ public class ProjectClient extends JFrame {
             printMessage("return delay: "+lDelay+" ms.\n");
             
             testDummyEvent2("login2");
+            try {
+            Thread.sleep(5000);
+         } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+         }
+            testDummyEvent2("requestLogin2");
          }
          else
          {
@@ -1324,6 +1331,12 @@ public class ProjectClient extends JFrame {
    
    public void testDummyEvent2(String dummy)
    {
+      try {
+      Thread.sleep(3000);
+   } catch (InterruptedException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+   }
       System.out.println("testDummyEvent2");
       CMInteractionInfo interInfo = m_clientStub.getCMInfo().getInteractionInfo();
       CMUser myself = interInfo.getMyself();
@@ -1344,6 +1357,7 @@ public class ProjectClient extends JFrame {
       due.setHandlerGroup(myself.getCurrentGroup());
       due.setDummyInfo(strInput);
       m_clientStub.cast(due, myself.getCurrentSession(), myself.getCurrentGroup());
+//      m_clientStub.broadcast(due);
       due = null;
       
       printMessage("======\n");
