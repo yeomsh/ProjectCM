@@ -1,8 +1,10 @@
 package kr.ac.konkuk.ccslab.cm.event;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
@@ -117,29 +119,61 @@ public class ServerListEvent extends CMEvent {
 		}
 	}
 
-	public void writeServerList(String serverIp,int cnt) {
+	public void writeNewServerList(CMServerInfo si,int cnt) throws FileNotFoundException {
 		readServerList();
 //	      recStr = getStringFromByteBuffer(msg);
 		p_serverList.clear();
 		String[] arr = recStr.split(", ");
+		System.out.println("writeNewServerList");
+		boolean isExist = false;
 		for(int i=0;i<(arr.length/5);i++) {
+			if(si.getServerName().equals(arr[i*5])) {
+				isExist = true;
+				break;
+			}
+		}
+		
+		if(!isExist) {
+			OutputStream output;
+			try {
+				output = new FileOutputStream("DB.txt",true);
+	            output.write((si.toString()+", 0, ").getBytes());
+	            System.out.println("add new server : " + si.toString());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+
+	public void writeServerList(String serverIp,int cnt) {
+		readServerList();
+//	      recStr = getStringFromByteBuffer(msg);
+		Vector<CMServerInfo> serverInfoList = new Vector<>();
+		HashMap<String, Integer> hashMap = new HashMap<>();
+
+		String[] arr = recStr.split(", ");
+
+		for(int i=0;i<(arr.length/5);i++) {
+			CMServerInfo cs = new CMServerInfo();
 			cs.setServerName(arr[i*5]);
 			cs.setServerAddress(arr[i*5+1]);
 			cs.setServerPort(Integer.parseInt(arr[i*5 + 2]));
 			cs.setServerUDPPort(8888);
-			p_serverList.add(cs);
-			serverHashMap.put(arr[i*5+1], Integer.parseInt(arr[i*5+4]));
+			serverInfoList.add(cs);
+			hashMap.put(arr[i*5+1],Integer.parseInt(arr[i*5 + 4]));
 		}
 		
 		
-		serverHashMap.put(serverIp,cnt);
+		hashMap.put(serverIp,cnt);
 		
 		System.out.println("?????????????"
-				+ p_serverList + "hashMap : " + serverHashMap);
+				+ serverInfoList + "hashMap : " + hashMap);
 
 		recStr="";
-		for (int i = 0; i < p_serverList.size(); i++) {
-			recStr += (p_serverList.get(i).toString()+", " + serverHashMap.get(p_serverList.get(i).getServerAddress()).toString()+", ");
+		for (int i = 0; i < serverInfoList.size(); i++) {
+			recStr += (serverInfoList.get(i).toString()+", " + hashMap.get(serverInfoList.get(i).getServerAddress()).toString()+", ");
 		}
 		try {
 			OutputStream output = new FileOutputStream("DB.txt", false);

@@ -342,16 +342,12 @@ public class CMMultiServerEvent extends CMEvent{
 		
 		for(int i=0;i<m_serverList.size();i++) {
 			System.out.println("*** 서버 리스트 파일에 저장 ***");
-			
-			//System.out.println(m_serverList.get(i).toString());
-			
-			
 			try {
-				OutputStream output = new FileOutputStream("DB.txt",true);
-				output.write((m_serverList.get(i).toString()+", 0, ").getBytes());
-			} catch (Exception e) {
+				ServerListEvent sle = new ServerListEvent();
+				sle.writeNewServerList(si, 0);
+			} catch (FileNotFoundException e1) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				e1.printStackTrace();
 			}
 		}
 		

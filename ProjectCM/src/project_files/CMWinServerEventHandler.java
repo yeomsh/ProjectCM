@@ -13,6 +13,7 @@ import java.nio.channels.DatagramChannel;
 import java.nio.channels.SocketChannel;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Vector;
 
 import kr.ac.konkuk.ccslab.cm.entity.CMMember;
 import kr.ac.konkuk.ccslab.cm.entity.CMServerInfo;
@@ -58,6 +59,7 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 	private int m_nCurNumFilesPerSession;
 	
 	private int count=0;
+	private int serverListCount = 0;
 	private String name;
 
 	public CMWinServerEventHandler(CMServerStub serverStub, ProjectServer server) {
@@ -113,8 +115,9 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 		// TODO Auto-generated method stub
 		count++;
 		System.out.println(count+"adf");
-		if(count==1)
+		if(count==serverListCount)
 		{
+			count = 0;
 			requestLogin2(cme);
 		}
 //		CMDummyEvent d = new CMDummyEvent();
@@ -332,27 +335,37 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 			de.setReceiver(cme.getSender());
 			de.setSender("SERVER");
 		  	File file = new File("DB.txt");
+		  	
+		  	Vector<String> serverName = new Vector<String>();
 			BufferedReader br;
 			try {
 				br = new BufferedReader(new FileReader(file));
 				String line;
-
 				line = br.readLine();
 				String[] arr2 = line.split(", ");
-				cs.setServerName(arr2[0]);
-				cs.setServerAddress(arr2[1]);
-				cs.setServerPort(Integer.parseInt(arr2[2]));
-				cs.setServerUDPPort(8888);
+				serverListCount = arr2.length/5;
+				System.out.print(serverListCount + "<- serverListCount");
+				for(int i=0;i<arr2.length/5;i++) {
+					serverName.add(arr2[i*5]);
+					de.setReceiver(serverName.get(i));
+					m_serverStub.send(de, de.getReceiver());
+					System.out.print(serverName.get(i) + "<- serverName."+i +"로 send 전송");
+
+				}
+//
+//				cs.setServerAddress(arr2[1]);
+//				cs.setServerPort(Integer.parseInt(arr2[2]));
+//				cs.setServerUDPPort(8888);
 				br.close();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-
-			for (int i = 0; i < 1; i++) {
-				de.setReceiver(cs.getServerName());
-				System.out.println(cs.getServerName() + "+ ~~~~~~~~~~~~~~~~~~~");
-				m_serverStub.send(de, de.getReceiver());
-			}
+//
+//			for (int i = 0; i < 1; i++) {
+//				de.setReceiver(cs.getServerName());
+//				System.out.println(cs.getServerName() + "+ ~~~~~~~~~~~~~~~~~~~");
+//				m_serverStub.send(de, de.getReceiver());
+//			}
 
 			// for()
 			// additional server가 내용 보내줌
@@ -458,8 +471,8 @@ public class CMWinServerEventHandler implements CMAppEventHandler {
 
 			try {
 				InetAddress ip = InetAddress.getLocalHost();
-				se = new ServerListEvent(m_serverStub.getMyself().getName()+"zvcz", ip.getHostAddress(),
-						m_serverStub.getServerPort(), 8888,4);//loginedUserCn
+				se = new ServerListEvent(m_serverStub.getMyself().getName(), ip.getHostAddress(),
+						m_serverStub.getServerPort(), 8888,loginedUserCnt);//loginedUserCn
 			} catch (UnknownHostException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

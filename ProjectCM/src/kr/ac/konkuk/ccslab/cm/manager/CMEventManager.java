@@ -162,9 +162,7 @@ public class CMEventManager {
 		case CMInfo.CM_SERVER_LIST_EVENT:
 			System.out.println("CM_SERVER_LIST_EVENT");
 			ServerListEvent sle = new ServerListEvent(buf);
-//			System.out.println("!!!!" + sle.getRecStr());
 			String getrecStr = sle.getRecStr();
-			//System.out.println(sle.getRecStr() + "~~~~~~~~~~");			
 			
 			String[] arr = getrecStr.split(", ");
 			//arr[0] name, arr[1] ip, arr[2] port, arr[3] udp, arr[4] usercnt

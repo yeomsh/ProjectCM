@@ -741,6 +741,7 @@ public class CMInteractionManager {
 					System.out.println("CMInteractionManger.processEvent(),dummyevent");
 				}
 				bProcessed = true;
+				break;
 			case CMInfo.CM_MULTI_SERVER_EVENT:
 				processMultiServerEvent(msg, cmInfo);
 				bProcessed = true;
@@ -2206,10 +2207,9 @@ public class CMInteractionManager {
 		
 		
 		//CMDummyEvent due = new CMDummyEvent();
-		ServerListEvent due = new ServerListEvent();
-		due.readServerList();
-        due.setReceiver(se.getSender());
-        due.setSender(strMyName);
+//		ServerListEvent due = new ServerListEvent();
+//        due.setReceiver(se.getSender());
+//        due.setSender(strMyName);
 		seAck.setChannelName(interInfo.getMyself().getName());
 		seAck.setChannelNum(nChKey);
 
@@ -2306,8 +2306,7 @@ public class CMInteractionManager {
 		{
 			
 			ret = CMEventManager.unicastEvent(seAck, user.getName(), cmInfo);
-			System.out.println("444444");
-			CMEventManager.unicastEvent(due, user.getName(), cmInfo);
+			//CMEventManager.unicastEvent(due, user.getName(), cmInfo);
 		}
 		
 		se = null;
